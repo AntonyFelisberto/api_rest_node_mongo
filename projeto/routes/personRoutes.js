@@ -48,6 +48,42 @@ router.get('/:id',async (req,res) => {
     }
 })
 
+router.patch('/:id',async (req, res) => {
+    console.log(req)
 
+    const id = req.params.id
+
+    const {name,salary,approved} = req.body
+    const person = {name,salary,approved}
+
+    try {
+        const updatedPerson = await Person.updateOne({_id:id},person)
+        if (updatedPerson.matchedCount === 0){
+            res.status(422).json({message:'o usuario nao encontrado'})
+            return
+        }
+        res.status(200).json(person)
+    }catch (err){
+        res.status(500).json({error: err})
+    }
+})
+
+router.delete('/:id', async (req,res) => {
+    const id = req.params.id
+
+    const person = await Person.findOne({_id:id})
+
+    if(!person){
+        res.status(422).json({message:"o usuario nao foi encontrado"})
+        return
+    }
+
+    try{
+        await Person.deleteOne({_id:id})
+        res.status(200).json({message:"usuario removido com sucess"})
+    }catch(err){
+        res.status(500).json({error: err})
+    }
+})
 
 module.exports = router
