@@ -12,6 +12,24 @@ app.use(
 
 app.use(express.json())
 
+app.post('/person',async (req, res) => {
+
+    const {name,salary,approved} = req.body
+
+    if(!name){
+      res.status(422).json({error: 'Campo nome é obrigatório'})  
+    }
+
+    const person = {name,salary,approved}
+
+    try {
+        await Person.create(person)
+        res.status(201).json({message:"pessoa inserida com sucesso"})
+    }catch (err) {
+        res.status(500).json({error: err})
+    }
+})
+
 app.get('/',(req,res)=>{
     res.json({
         message:"oi express"
