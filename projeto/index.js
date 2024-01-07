@@ -1,8 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-
+const mongoose = require('mongoose');
 const Person = require('./models/Person');
+const personRoutes = require('./routes/personRoutes');
+
 
 app.use(
     express.urlencoded({
@@ -12,23 +13,7 @@ app.use(
 
 app.use(express.json())
 
-app.post('/person',async (req, res) => {
-
-    const {name,salary,approved} = req.body
-
-    if(!name){
-      res.status(422).json({error: 'Campo nome é obrigatório'})  
-    }
-
-    const person = {name,salary,approved}
-
-    try {
-        await Person.create(person)
-        res.status(201).json({message:"pessoa inserida com sucesso"})
-    }catch (err) {
-        res.status(500).json({error: err})
-    }
-})
+app.use('/person',personRoutes)
 
 app.get('/',(req,res)=>{
     res.json({
