@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+require('dotenv').config()
 const mongoose = require('mongoose');
 const Person = require('./models/Person');
 const personRoutes = require('./routes/personRoutes');
@@ -21,8 +22,8 @@ app.get('/',(req,res)=>{
     })
 })
 
-const DB_USER = "antony"
-const DB_PASSWORD = encodeURIComponent("5GJ3GsUtw2EJPpEn")
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD)
 
 mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@apicluster.pfnxque.mongodb.net/?retryWrites=true&w=majority`)
 .then(()=>{
